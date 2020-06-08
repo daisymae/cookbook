@@ -7,9 +7,4 @@ import { Component, EventEmitter, Output } from '@angular/core';
 export class HeaderComponent {
   // hamburger menu support
   collapsed = true;
-  @Output() menuSelected = new EventEmitter<string>();
-
-  onSelect(selected: string) {
-    this.menuSelected.emit(selected);
-  }
 }
