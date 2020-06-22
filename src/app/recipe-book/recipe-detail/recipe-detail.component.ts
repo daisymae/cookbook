@@ -1,6 +1,8 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Recipe } from '../recipe.model';
 import { ShoppingListService } from 'src/app/shopping-list/shopping-list.service';
+import { ActivatedRoute, Params } from '@angular/router';
+import { RecipeService } from '../recipe.service';
 
 @Component({
   selector: 'app-recipe-detail',
@@ -8,12 +10,24 @@ import { ShoppingListService } from 'src/app/shopping-list/shopping-list.service
   styleUrls: ['./recipe-detail.component.css'],
 })
 export class RecipeDetailComponent implements OnInit {
-  // @Input so can be set from outside
-  @Input() recipe: Recipe;
+  recipe: Recipe;
+  id: number;
 
-  constructor(private slService: ShoppingListService) {}
+  constructor(
+    private slService: ShoppingListService,
+    private recipeService: RecipeService,
+    private route: ActivatedRoute
+  ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    // this approach would only work on first visit;
+    // want to react to changes
+    // const id = this.route.snapshot.params['id'];
+    this.route.params.subscribe((params: Params) => {
+      this.id = +params.id;
+      this.recipe = this.recipeService.getRecipe(this.id);
+    });
+  }
 
   onAddIngredientsToShoppingList() {
     this.slService.addIngredients(this.recipe.ingredients);
